@@ -14,7 +14,13 @@ const useMyStyles = makeStyles({
       minHeight: '100%',
     },
     '& canvas': {
-      display: 'none',
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      bottom: 0,
+      right: 0,
+      minWidth: '100%',
+      minHeight: '100%',
     },
   },
 });
@@ -52,7 +58,7 @@ const Scanner: React.FC<ScannerProps> = (props: ScannerProps) => {
             facingMode: 'environment',
           },
         },
-        numOfWorkers: 1,
+        numOfWorkers: 4,
         locate: true,
         decoder: {
           readers: ['ean_reader'],
