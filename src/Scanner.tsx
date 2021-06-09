@@ -49,7 +49,7 @@ const Scanner: React.FC<ScannerProps> = (props: ScannerProps) => {
           type: 'LiveStream',
           target: document.querySelector('#barcodeContainer') || undefined,
           constraints: {
-            facingMode: 'enviroment',
+            facingMode: 'environment',
           },
         },
         numOfWorkers: 1,
