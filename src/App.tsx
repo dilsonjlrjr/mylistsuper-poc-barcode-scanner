@@ -1,26 +1,47 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Grid, makeStyles } from '@material-ui/core';
+import Scanner from './Scanner';
 
 const useMyStyles = makeStyles({
-  grid: {
-    height: '100vh',
+  root: {
+    position: 'fixed',
+    bottom: 21,
   },
 });
 
 const App: React.FC = () => {
+  const [startDetected, setStartDetected] = useState(false);
+
   const classes = useMyStyles();
+
+  const onWrapperCode = (code: string) => {
+    alert(code);
+  };
+
+  const onClickButtonReiniciarLeitura = () => {
+    setStartDetected(true);
+  };
 
   return (
     <Grid
-      className={classes.grid}
       container
-      direction="row"
+      lg={12}
+      direction="column"
       justify="center"
-      alignContent="center"
+      alignItems="center"
     >
-      <Button variant="contained" color="primary">
-        Iniciar leitor
-      </Button>
+      <Grid item xs={12} spacing={0}>
+        <Scanner startdetected={startDetected} onWrapperCode={onWrapperCode} />
+      </Grid>
+      <Grid item xs={12} spacing={0} className={classes.root}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={onClickButtonReiniciarLeitura}
+        >
+          Reiniciar a leitura
+        </Button>
+      </Grid>
     </Grid>
   );
 };
