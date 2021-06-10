@@ -23,17 +23,11 @@ const App: React.FC = () => {
   };
 
   return (
-    <Grid
-      container
-      lg={12}
-      direction="column"
-      justify="center"
-      alignItems="center"
-    >
-      <Grid item xs={12} spacing={0}>
+    <Grid container direction="column" justify="center" alignItems="center">
+      <Grid item>
         <Scanner startdetected={startDetected} onWrapperCode={onWrapperCode} />
       </Grid>
-      <Grid item xs={12} spacing={0} className={classes.root}>
+      <Grid item className={classes.root}>
         <Button
           variant="contained"
           color="primary"
