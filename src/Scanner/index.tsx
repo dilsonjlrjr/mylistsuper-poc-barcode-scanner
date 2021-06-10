@@ -62,7 +62,7 @@ const Scanner: React.FC<ScannerProps> = (props: ScannerProps) => {
         numOfWorkers: 4,
         locate: true,
         locator: {
-          patchSize: 'medium',
+          patchSize: 'large',
           halfSample: true,
         },
         frequency: 10,
