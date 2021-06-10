@@ -6,6 +6,8 @@ const configScanner: QuaggaJSConfigObject = {
     type: 'LiveStream',
     target: document.querySelector('#barcodeContainer') || undefined,
     constraints: {
+      width: { min: 450 },
+      height: { min: 300 },
       facingMode: 'environment',
       aspectRatio: { min: 1, max: 2 },
     },

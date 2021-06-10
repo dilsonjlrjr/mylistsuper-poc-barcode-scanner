@@ -49,12 +49,34 @@ const Scanner: React.FC<ScannerProps> = (props: ScannerProps) => {
   const classes = useMyStyles();
 
   useEffect(() => {
-    Quagga.init(configScanner, error => {
-      if (error) {
-        console.log(error, 'error msg');
-      }
-      Quagga.start();
-    });
+    Quagga.init(
+      {
+        inputStream: {
+          name: 'Live',
+          type: 'LiveStream',
+          target: document.querySelector('#barcodeContainer') || undefined,
+          constraints: {
+            facingMode: 'environment',
+          },
+        },
+        numOfWorkers: 4,
+        locate: true,
+        locator: {
+          patchSize: 'medium',
+          halfSample: true,
+        },
+        frequency: 10,
+        decoder: {
+          readers: ['ean_reader'],
+        },
+      },
+      error => {
+        if (error) {
+          console.log(error, 'error msg');
+        }
+        Quagga.start();
+      },
+    );
 
     Quagga.onProcessed(result => {
       const drawingCtx = Quagga.canvas.ctx.overlay;
