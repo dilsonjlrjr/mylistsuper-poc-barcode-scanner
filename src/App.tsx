@@ -19,6 +19,7 @@ const App: React.FC = () => {
   };
 
   const onClickButtonReiniciarLeitura = () => {
+    setStartDetected(false);
     setStartDetected(true);
   };
 

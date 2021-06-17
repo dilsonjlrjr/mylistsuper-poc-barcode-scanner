@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import Quagga, { QuaggaJSResultObject } from '@ericblade/quagga2';
 import { makeStyles } from '@material-ui/core';
-import configScanner from './config-scanner';
 
 const useMyStyles = makeStyles({
   root: {
@@ -49,14 +48,14 @@ const Scanner: React.FC<ScannerProps> = (props: ScannerProps) => {
   const classes = useMyStyles();
 
   useEffect(() => {
-    Quagga.decodeSingle(
+    Quagga.init(
       {
         inputStream: {
-          type: "LiveStream",
+          type: 'LiveStream',
           constraints: {
             width: 640,
             height: 320,
-            facingMode: "environment",
+            facingMode: 'environment',
           },
           //   area: { // defines rectangle of the detection/localization area
           //     top: "10%",    // top offset
@@ -67,7 +66,7 @@ const Scanner: React.FC<ScannerProps> = (props: ScannerProps) => {
         },
         locator: {
           halfSample: true,
-          patchSize: "large", // x-small, small, medium, large, x-large
+          patchSize: 'large', // x-small, small, medium, large, x-large
           debug: {
             showCanvas: true,
             showPatches: false,
@@ -85,7 +84,7 @@ const Scanner: React.FC<ScannerProps> = (props: ScannerProps) => {
         },
         numOfWorkers: 4,
         decoder: {
-          readers: ["ean_reader"],
+          readers: ['ean_reader'],
           debug: {
             drawBoundingBox: true,
             showFrequency: true,
@@ -103,47 +102,47 @@ const Scanner: React.FC<ScannerProps> = (props: ScannerProps) => {
       },
     );
 
-    Quagga.onProcessed(result => {
-      const drawingCtx = Quagga.canvas.ctx.overlay;
-      const drawingCanvas = Quagga.canvas.dom.overlay;
+    // Quagga.onProcessed(result => {
+    //   const drawingCtx = Quagga.canvas.ctx.overlay;
+    //   const drawingCanvas = Quagga.canvas.dom.overlay;
 
-      if (result) {
-        if (result.boxes) {
-          drawingCtx.clearRect(
-            0,
-            0,
-            Number(drawingCanvas.getAttribute('width')),
-            Number(drawingCanvas.getAttribute('height')),
-          );
-          result.boxes
-            .filter(box => {
-              return box !== result.box;
-            })
-            .forEach(box => {
-              Quagga.ImageDebug.drawPath(box, { x: 0, y: 1 }, drawingCtx, {
-                color: 'green',
-                lineWidth: 2,
-              });
-            });
-        }
+    //   if (result) {
+    //     if (result.boxes) {
+    //       drawingCtx.clearRect(
+    //         0,
+    //         0,
+    //         Number(drawingCanvas.getAttribute('width')),
+    //         Number(drawingCanvas.getAttribute('height')),
+    //       );
+    //       result.boxes
+    //         .filter(box => {
+    //           return box !== result.box;
+    //         })
+    //         .forEach(box => {
+    //           Quagga.ImageDebug.drawPath(box, { x: 0, y: 1 }, drawingCtx, {
+    //             color: 'green',
+    //             lineWidth: 2,
+    //           });
+    //         });
+    //     }
 
-        if (result.box) {
-          Quagga.ImageDebug.drawPath(result.box, { x: 0, y: 1 }, drawingCtx, {
-            color: '#00F',
-            lineWidth: 2,
-          });
-        }
+    //     if (result.box) {
+    //       Quagga.ImageDebug.drawPath(result.box, { x: 0, y: 1 }, drawingCtx, {
+    //         color: '#00F',
+    //         lineWidth: 2,
+    //       });
+    //     }
 
-        if (result.codeResult && result.codeResult.code) {
-          Quagga.ImageDebug.drawPath(
-            result.line,
-            { x: 'x', y: 'y' },
-            drawingCtx,
-            { color: 'red', lineWidth: 3 },
-          );
-        }
-      }
-    });
+    //     if (result.codeResult && result.codeResult.code) {
+    //       Quagga.ImageDebug.drawPath(
+    //         result.line,
+    //         { x: 'x', y: 'y' },
+    //         drawingCtx,
+    //         { color: 'red', lineWidth: 3 },
+    //       );
+    //     }
+    //   }
+    // });
 
     Quagga.onDetected(onDetected);
   }, []);

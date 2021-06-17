@@ -2,24 +2,46 @@ import { QuaggaJSConfigObject } from '@ericblade/quagga2';
 
 const configScanner: QuaggaJSConfigObject = {
   inputStream: {
-    name: 'Live',
     type: 'LiveStream',
-    target: document.querySelector('#barcodeContainer') || undefined,
     constraints: {
-      width: { min: 450 },
-      height: { min: 300 },
+      width: 640,
+      height: 320,
       facingMode: 'environment',
-      aspectRatio: { min: 1, max: 2 },
     },
+    //   area: { // defines rectangle of the detection/localization area
+    //     top: "10%",    // top offset
+    //     right: "10%",  // right offset
+    //     left: "10%",   // left offset
+    //     bottom: "10%"  // bottom offset
+    //   },
   },
   locator: {
-    patchSize: 'medium',
     halfSample: true,
+    patchSize: 'large', // x-small, small, medium, large, x-large
+    debug: {
+      showCanvas: true,
+      showPatches: false,
+      showFoundPatches: false,
+      showSkeleton: false,
+      showLabels: false,
+      showPatchLabels: false,
+      showRemainingPatchLabels: false,
+      boxFromPatches: {
+        showTransformed: true,
+        showTransformedBox: true,
+        showBB: true,
+      },
+    },
   },
-  numOfWorkers: 2,
-  frequency: 10,
+  numOfWorkers: 4,
   decoder: {
     readers: ['ean_reader'],
+    debug: {
+      drawBoundingBox: true,
+      showFrequency: true,
+      drawScanline: true,
+      showPattern: true,
+    },
   },
   locate: true,
 };
