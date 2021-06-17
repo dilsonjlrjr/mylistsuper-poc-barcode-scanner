@@ -85,7 +85,15 @@ const Scanner: React.FC<ScannerProps> = (props: ScannerProps) => {
         },
         numOfWorkers: 4,
         decoder: {
-          readers: ['ean_reader'],
+          readers: [
+            {
+              format: 'ean_reader',
+              config: {
+                supplements: ['ean_5_reader', 'ean_2_reader'],
+              },
+            },
+            'ean_8_reader',
+          ],
           debug: {
             drawBoundingBox: true,
             showFrequency: true,
