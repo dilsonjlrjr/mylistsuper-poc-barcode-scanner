@@ -49,26 +49,51 @@ const Scanner: React.FC<ScannerProps> = (props: ScannerProps) => {
   const classes = useMyStyles();
 
   useEffect(() => {
-    Quagga.init(
+    Quagga.decodeSingle(
       {
         inputStream: {
-          name: 'Live',
-          type: 'LiveStream',
-          target: document.querySelector('#barcodeContainer') || undefined,
+          type: "LiveStream",
           constraints: {
-            facingMode: 'environment',
+            width: 640,
+            height: 320,
+            facingMode: "environment",
+          },
+          //   area: { // defines rectangle of the detection/localization area
+          //     top: "10%",    // top offset
+          //     right: "10%",  // right offset
+          //     left: "10%",   // left offset
+          //     bottom: "10%"  // bottom offset
+          //   },
+        },
+        locator: {
+          halfSample: true,
+          patchSize: "large", // x-small, small, medium, large, x-large
+          debug: {
+            showCanvas: true,
+            showPatches: false,
+            showFoundPatches: false,
+            showSkeleton: false,
+            showLabels: false,
+            showPatchLabels: false,
+            showRemainingPatchLabels: false,
+            boxFromPatches: {
+              showTransformed: true,
+              showTransformedBox: true,
+              showBB: true,
+            },
           },
         },
         numOfWorkers: 4,
-        locate: true,
-        locator: {
-          patchSize: 'large',
-          halfSample: true,
-        },
-        frequency: 10,
         decoder: {
-          readers: ['ean_reader'],
+          readers: ["ean_reader"],
+          debug: {
+            drawBoundingBox: true,
+            showFrequency: true,
+            drawScanline: true,
+            showPattern: true,
+          },
         },
+        locate: true,
       },
       error => {
         if (error) {
