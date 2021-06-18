@@ -101,7 +101,7 @@ const Scanner: React.FC<ScannerProps> = (props: ScannerProps) => {
       {
         inputStream: {
           target: '#barcodeContainer',
-          type: 'VideoStream',
+          type: 'LiveStream',
           constraints: {
             width: 800,
             height: 600,
@@ -123,7 +123,7 @@ const Scanner: React.FC<ScannerProps> = (props: ScannerProps) => {
         decoder: {
           readers: ['ean_reader'],
         },
-        locate: true,
+        locate: false,
       },
       error => {
         if (error) {
