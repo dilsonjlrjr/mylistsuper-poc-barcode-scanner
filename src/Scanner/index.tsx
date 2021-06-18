@@ -101,7 +101,7 @@ const Scanner: React.FC<ScannerProps> = (props: ScannerProps) => {
       {
         inputStream: {
           target: '#barcodeContainer',
-          type: 'LiveStream',
+          type: 'VideoStream',
           constraints: {
             width: 800,
             height: 600,
