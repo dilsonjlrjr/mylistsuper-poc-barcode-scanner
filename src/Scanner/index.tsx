@@ -54,44 +54,25 @@ const Scanner: React.FC<ScannerProps> = (props: ScannerProps) => {
           target: '#barcodeContainer',
           type: 'LiveStream',
           constraints: {
-            width: 640,
-            height: 320,
+            width: 800,
+            height: 600,
             facingMode: 'environment',
           },
-          //   area: { // defines rectangle of the detection/localization area
-          //     top: "10%",    // top offset
-          //     right: "10%",  // right offset
-          //     left: "10%",   // left offset
-          //     bottom: "10%"  // bottom offset
-          //   },
+          area: {
+            top: '0%',
+            right: '0%',
+            left: '0%',
+            bottom: '0%',
+          },
         },
         locator: {
           halfSample: true,
-          patchSize: 'large', // x-small, small, medium, large, x-large
-          debug: {
-            showCanvas: true,
-            showPatches: false,
-            showFoundPatches: false,
-            showSkeleton: false,
-            showLabels: false,
-            showPatchLabels: false,
-            showRemainingPatchLabels: false,
-            boxFromPatches: {
-              showTransformed: true,
-              showTransformedBox: true,
-              showBB: true,
-            },
-          },
+          patchSize: 'medium',
         },
         numOfWorkers: 4,
+        frequency: 5,
         decoder: {
-          readers: ['ean_reader', 'ean_8_reader'],
-          debug: {
-            drawBoundingBox: true,
-            showFrequency: true,
-            drawScanline: true,
-            showPattern: true,
-          },
+          readers: ['ean_reader'],
         },
         locate: true,
       },
