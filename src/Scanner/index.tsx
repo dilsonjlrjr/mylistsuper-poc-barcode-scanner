@@ -30,15 +30,64 @@ type ScannerProps = {
   onWrapperCode(code: string | null): void;
 };
 
+type ResultCount = {
+  [value: string]: number;
+};
+
 const Scanner: React.FC<ScannerProps> = (props: ScannerProps) => {
-  const { startdetected, onWrapperCode } = props;
+  const resultDetected: string[] = [];
+  const limitDetected = 2;
+
+  const { onWrapperCode } = props;
+  let { startdetected } = props;
+
+  const getCodeResult = (arrayDetected: Array<string>): string => {
+    const distinctValue = (value: string, index: number, self: string[]) => {
+      return self.indexOf(value) === index;
+    };
+
+    const distinctArrayResult = arrayDetected.filter(distinctValue);
+
+    const arrayCount: ResultCount = {};
+    distinctArrayResult.forEach((value: string) => {
+      resultDetected.forEach((valueDetected: string) => {
+        if (value === valueDetected) {
+          if (Number.isNaN(arrayCount[value])) {
+            arrayCount[value] = 1;
+          } else {
+            arrayCount[value] += 1;
+          }
+        }
+      });
+    });
+
+    let lastNumber = 0;
+    let keyValue = '';
+
+    Object.entries(arrayCount).forEach(value => {
+      const [resultStringCode, qunt] = value;
+
+      if (qunt > lastNumber) {
+        lastNumber = qunt;
+        keyValue = resultStringCode;
+      }
+    });
+
+    return keyValue;
+  };
 
   const onDetected = (result: QuaggaJSResultObject): void => {
-    Quagga.offDetected(onDetected);
-    onWrapperCode(result.codeResult.code);
+    if (resultDetected && resultDetected.length === limitDetected) {
+      Quagga.offDetected(onDetected);
+      startdetected = false;
+      onWrapperCode(getCodeResult(resultDetected));
+    } else {
+      resultDetected.push(result.codeResult.code || '');
+    }
   };
 
   useEffect(() => {
+    console.info('mudou estado');
     if (startdetected) {
       console.info('reiniciando a leitura', startdetected);
       Quagga.onDetected(onDetected);
@@ -70,7 +119,7 @@ const Scanner: React.FC<ScannerProps> = (props: ScannerProps) => {
           patchSize: 'medium',
         },
         numOfWorkers: 4,
-        frequency: 5,
+        frequency: 13,
         decoder: {
           readers: ['ean_reader'],
         },
@@ -102,26 +151,10 @@ const Scanner: React.FC<ScannerProps> = (props: ScannerProps) => {
             })
             .forEach(box => {
               Quagga.ImageDebug.drawPath(box, { x: 0, y: 1 }, drawingCtx, {
-                color: 'green',
-                lineWidth: 2,
+                color: 'blue',
+                lineWidth: 3,
               });
             });
-        }
-
-        if (result.box) {
-          Quagga.ImageDebug.drawPath(result.box, { x: 0, y: 1 }, drawingCtx, {
-            color: '#00F',
-            lineWidth: 2,
-          });
-        }
-
-        if (result.codeResult && result.codeResult.code) {
-          Quagga.ImageDebug.drawPath(
-            result.line,
-            { x: 'x', y: 'y' },
-            drawingCtx,
-            { color: 'red', lineWidth: 3 },
-          );
         }
       }
     });

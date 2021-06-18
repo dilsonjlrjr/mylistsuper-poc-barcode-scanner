@@ -10,7 +10,7 @@ const useMyStyles = makeStyles({
 });
 
 const App: React.FC = () => {
-  const [startDetected, setStartDetected] = useState(false);
+  const [restartDetected, setRestartDetected] = useState(false);
 
   const classes = useMyStyles();
 
@@ -19,14 +19,16 @@ const App: React.FC = () => {
   };
 
   const onClickButtonReiniciarLeitura = () => {
-    setStartDetected(false);
-    setStartDetected(true);
+    setRestartDetected(true);
   };
 
   return (
     <Grid container direction="column" justify="center" alignItems="center">
       <Grid item>
-        <Scanner startdetected={startDetected} onWrapperCode={onWrapperCode} />
+        <Scanner
+          startdetected={restartDetected}
+          onWrapperCode={onWrapperCode}
+        />
       </Grid>
       <Grid item className={classes.root}>
         <Button
