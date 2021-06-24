@@ -1,29 +1,6 @@
-import React, { useEffect } from 'react';
-import Quagga, { QuaggaJSResultObject } from '@ericblade/quagga2';
-import { makeStyles } from '@material-ui/core';
-
-const useMyStyles = makeStyles({
-  root: {
-    '& video': {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      bottom: 0,
-      right: 0,
-      minWidth: '100%',
-      minHeight: '100%',
-    },
-    '& canvas': {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      bottom: 0,
-      right: 0,
-      minWidth: '100%',
-      minHeight: '100%',
-    },
-  },
-});
+import React, { useEffect } from "react";
+import styles from "./style.module.css";
+import Quagga, { QuaggaJSResultObject } from "@ericblade/quagga2";
 
 type ScannerProps = {
   startdetected: boolean;
@@ -62,9 +39,9 @@ const Scanner: React.FC<ScannerProps> = (props: ScannerProps) => {
     });
 
     let lastNumber = 0;
-    let keyValue = '';
+    let keyValue = "";
 
-    Object.entries(arrayCount).forEach(value => {
+    Object.entries(arrayCount).forEach((value) => {
       const [resultStringCode, qunt] = value;
 
       if (qunt > lastNumber) {
@@ -82,58 +59,56 @@ const Scanner: React.FC<ScannerProps> = (props: ScannerProps) => {
       startdetected = false;
       onWrapperCode(getCodeResult(resultDetected));
     } else {
-      resultDetected.push(result.codeResult.code || '');
+      resultDetected.push(result.codeResult.code || "");
     }
   };
 
   useEffect(() => {
-    console.info('mudou estado');
+    console.info("mudou estado");
     if (startdetected) {
-      console.info('reiniciando a leitura', startdetected);
+      console.info("reiniciando a leitura", startdetected);
       Quagga.onDetected(onDetected);
     }
   }, [startdetected]);
-
-  const classes = useMyStyles();
 
   useEffect(() => {
     Quagga.init(
       {
         inputStream: {
-          target: '#barcodeContainer',
-          type: 'LiveStream',
+          target: "#barcodeContainer",
+          type: "LiveStream",
           constraints: {
             width: 800,
             height: 600,
-            facingMode: 'environment',
+            facingMode: "environment",
           },
           area: {
-            top: '0%',
-            right: '0%',
-            left: '0%',
-            bottom: '0%',
+            top: "0%",
+            right: "0%",
+            left: "0%",
+            bottom: "0%",
           },
         },
         locator: {
           halfSample: true,
-          patchSize: 'medium',
+          patchSize: "medium",
         },
         numOfWorkers: 4,
         frequency: 13,
         decoder: {
-          readers: ['ean_reader'],
+          readers: ["ean_reader"],
         },
-        locate: false,
+        locate: true,
       },
-      error => {
+      (error) => {
         if (error) {
-          console.log(error, 'error msg');
+          console.log(error, "error msg");
         }
         Quagga.start();
-      },
+      }
     );
 
-    Quagga.onProcessed(result => {
+    Quagga.onProcessed((result) => {
       const drawingCtx = Quagga.canvas.ctx.overlay;
       const drawingCanvas = Quagga.canvas.dom.overlay;
 
@@ -142,16 +117,16 @@ const Scanner: React.FC<ScannerProps> = (props: ScannerProps) => {
           drawingCtx.clearRect(
             0,
             0,
-            Number(drawingCanvas.getAttribute('width')),
-            Number(drawingCanvas.getAttribute('height')),
+            Number(drawingCanvas.getAttribute("width")),
+            Number(drawingCanvas.getAttribute("height"))
           );
           result.boxes
-            .filter(box => {
+            .filter((box) => {
               return box !== result.box;
             })
-            .forEach(box => {
+            .forEach((box) => {
               Quagga.ImageDebug.drawPath(box, { x: 0, y: 1 }, drawingCtx, {
-                color: 'blue',
+                color: "blue",
                 lineWidth: 3,
               });
             });
@@ -162,7 +137,7 @@ const Scanner: React.FC<ScannerProps> = (props: ScannerProps) => {
     Quagga.onDetected(onDetected);
   }, []);
 
-  return <div className={classes.root} id="barcodeContainer" />;
+  return <div className={styles.scannerbarcode} id="barcodeContainer" />;
 };
 
 export default Scanner;

@@ -1,45 +1,23 @@
-import React, { useState } from 'react';
-import { Button, Grid, makeStyles } from '@material-ui/core';
-import Scanner from './Scanner';
-
-const useMyStyles = makeStyles({
-  root: {
-    position: 'fixed',
-    bottom: 21,
-  },
-});
+import React from "react";
+import { Navigator } from "react-onsenui";
+import MainPage from "./pages/MainPage";
 
 const App: React.FC = () => {
-  const [restartDetected, setRestartDetected] = useState(false);
+  const renderPageApp = (route: any, navigator: Navigator | undefined) => {
+    route.props = route.props || {};
+    route.props.navigator = navigator;
 
-  const classes = useMyStyles();
-
-  const onWrapperCode = (code: string) => {
-    alert(code);
-  };
-
-  const onClickButtonReiniciarLeitura = () => {
-    setRestartDetected(true);
+    return React.createElement(route.component, route.props);
   };
 
   return (
-    <Grid container direction="column" justify="center" alignItems="center">
-      <Grid item>
-        <Scanner
-          startdetected={restartDetected}
-          onWrapperCode={onWrapperCode}
-        />
-      </Grid>
-      <Grid item className={classes.root}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={onClickButtonReiniciarLeitura}
-        >
-          Reiniciar a leitura
-        </Button>
-      </Grid>
-    </Grid>
+    <Navigator
+      initialRoute={{
+        component: MainPage,
+        props: { title: "Minha tela fofa" },
+      }}
+      renderPage={renderPageApp}
+    />
   );
 };
 
